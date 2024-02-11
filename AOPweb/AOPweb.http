@@ -1,0 +1,11 @@
+@AOPweb_HostAddress = http://localhost:5246
+
+GET {{AOPweb_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{AOPweb_HostAddress}}/todos/1
+Accept: application/json
+
+###

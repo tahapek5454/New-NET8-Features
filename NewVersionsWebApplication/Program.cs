@@ -32,7 +32,7 @@ app.MapGet("/exception", () =>
 #endregion
 
 #region Keyed Service | ShortCircut
-app.MapGet("/", ([FromKeyedServices("frontend")]IDeveloperService developerService) =>
+app.MapGet("/", ([FromKeyedServices("frontend")] IDeveloperService developerService) =>
 {
     return developerService.GetDeveloperType;
 }).ShortCircuit();

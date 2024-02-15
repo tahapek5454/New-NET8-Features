@@ -9,7 +9,7 @@ namespace NewVersions
 {
     internal class NameOf
     {
-        public string S { get; } = "";
+        public string S { get; } = "as";
         public static int StaticField;
         public string NameOfLength { get; } = nameof(S.Length);
 

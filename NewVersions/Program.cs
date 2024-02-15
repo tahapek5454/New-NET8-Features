@@ -1,9 +1,16 @@
 ﻿#region using
 using NewVersions;
 using System.ComponentModel;
+
 using Peronals = System.Collections.Generic.List<NewVersions.Personal>;
 using Customer = System.ValueTuple<int, string>;
+
 using System.Diagnostics.CodeAnalysis;
+using NewVersions.InterfaceExample;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Collections.Frozen;
+using System.Xml.Linq;
 #endregion
 
 
@@ -23,7 +30,7 @@ List<User> user = new();
 
 // c# 12 sonrasi
 List<User> newUsers = [
-        new User ()
+        new User()
         {
             Name = "Taha"
         }
@@ -87,7 +94,7 @@ void DeleteDatabase()
 DeleteDatabase();
 #pragma warning restore Feature01
 
-//DeleteDatabase();
+// DeleteDatabase();
 
 #endregion
 
@@ -126,81 +133,135 @@ Console.WriteLine(json);
 
 #endregion
 
-#region Interceptors: Yenilikçi ve Deneysel Bir Yaklaşım
+#region 08-) Interceptors: Yenilikçi ve Deneysel Bir Yaklaşım
+var e = new Example();
+e.Method1();
+e.Method2();
+#endregion
+
+#region 09-) Ref Readonly Parameter
+
+Console.WriteLine("ref readonly Parametre");
+int sayi = 1;
+ShowAndIncerase(ref sayi);
+Console.WriteLine($"{sayi}");
+
+void ShowAndIncerase(ref readonly int number)
+{
+    Console.WriteLine(number);
+    // number++;
+}
 
 #endregion
 
-#region Nameof
+#region 10-) Random.Shared
+Console.WriteLine("Random.Shared");
 
-var myNameOf = new NameOf();
-
-var y = myNameOf.StringLength("asdas");
-
-NameOf.NameOfExamples();
-
-var method = myNameOf.GetType().GetMethod("StringLength");
-var c = method.GetCustomAttributes(true);
-var attribute = (DescriptionAttribute)c[0];
-Console.WriteLine(attribute == null ? "null" : attribute.Description);
-
-#endregion
-
-#region  Random.Shared
-int[] arrays = new int[]{ 1, 3, 4, 56, 7, 89, 5, 4, 2, 34, 65, 4 };
+int[] arrays = new int[] { 1, 3, 4, 56, 7, 89, 5, 4, 2, 34, 65, 4 };
 
 var randomNumbers = Random.Shared.GetItems(arrays, 4);
-randomNumbers.ToList().ForEach(p => Console.WriteLine(p));
+randomNumbers.ToList().ForEach(p => Console.Write(" " + p));
 
+Console.WriteLine();
+
+// Random Forest, Logistic Regression, Naive Bayes -> Asiri Ogrenmeyi Engeller
 Random.Shared.Shuffle(arrays);
 
-arrays.ToList().ForEach(p => Console.Write(" "+p));
+arrays.ToList().ForEach(p => Console.Write(" " + p));
 
 Console.WriteLine();
 #endregion
 
-#region Keyed Service | Dependency Injection
-// Web Projesinde
+#region 11-) System.Text.Json’da Perfomans İyileştirmesi Ve Yeni Özellikler:
+//// .NET 8 ile birlikte System.Text.Json’da Perfomans artışı ve yeni birçok özellik dahil edildi.
+//// Bu da frameworkun NewtonSoft Json kutuphanesine olan bağımlığını ortadan kaldırdı.
+Console.WriteLine("System.Text.Json’da Perfomans İyileştirmesi Ve Yeni Özellikler");
+
+//// Interface Hierarchies
+
+IDerived derived = new DerivedImplementation()
+{
+    Base = 0,
+    Drived = 1
+};
+
+var text = JsonSerializer.Serialize(derived);
+
+Console.WriteLine(text);
+
+// New Json Node API Methods
+
+JsonNode node1 = JsonNode.Parse(text);
+JsonNode node2 = JsonNode.Parse(text);
+
+Console.WriteLine(JsonNode.DeepEquals(node1, node2));
+
 #endregion
 
-#region Short-Circuit Routing
-// Web Projesinde
+#region 12-) Streaming Deserialization
+
+// IAsyncEnumarable
+
 #endregion
 
-#region IExceptionHandler
-// web projesinde
+#region 13-) System.Collection.Frozen
+
+Console.WriteLine("System.Collection.Frozen");
+
+//Amaç Hızlı Okuma (bir kere yazılır ve bir daha değişmez)
+
+Dictionary<int, string> dict = new Dictionary<int, string>();
+dict.Add(1, "Taha");
+dict.Add(2, "Pek");
+
+FrozenDictionary<int, string> frozenDict = dict.ToFrozenDictionary();
+
+List<int> list = [1, 2, 3];
+FrozenSet<int> frozenSet = list.ToFrozenSet();
+
+string value = "";
+frozenDict.TryGetValue(1, out value);
+Console.WriteLine(value);
+
+Console.WriteLine(frozenSet.First());
+
 #endregion
 
-#region Minimal API Ahead of Time(AOT) Compilation Template
-// web projesinde
+#region 14-) String.IndexOfAny
+// O(1) Time Complexity
+string test = "Doğuş Teknoloji";
+var sequence = test.IndexOfAny(['u']);
+Console.WriteLine(sequence);
 #endregion
 
-#region LİNQ Sorgularının Performansı
+#region 15-) LINQ Sorgularının Performansı
 // performans artmistir.
+// %35
 #endregion
 
-#region System.Text.Json’da Perfomans İyileştirmesi:
-// Perofrmans Artis
+#region 16-) Keyed Service | Dependency Injection
+// Web Projesinde
 #endregion
 
-#region ref readonly Parametre
-// Arastirmali
+#region 17-) Short-Circuit Routing
+// Web Projesinde
 #endregion
 
+#region 18-) IExceptionHandler
+// web projesinde
+#endregion
 
-// Arastir Bunlar Ne Zaman Geldi.
+#region 19-) Minimal API Ahead of Time(AOT) Compilation Template
+// web projesinde
+#endregion
 
-#region Interface With Body
+#region 20-) Interface With Body
 IMailService mailService = new MailService();
 mailService.SendMail();
 IMailService.StaticMethod();
 #endregion
 
-#region Readonly Struct
-var rectangele = new MyStruct(5, 4);
-Console.WriteLine(rectangele);
-#endregion
-
-#region Switch Expression
+#region 21-) Switch Expression
 
 string WhatIsType(ShapeTypes type)
 {
@@ -218,4 +279,60 @@ string WhatIsType(ShapeTypes type)
 Console.WriteLine(WhatIsType(ShapeTypes.Kare));
 
 #endregion
+
+#region 22-) Is Keyword Not Pattern
+
+// Önce C#9
+string name = null;
+if (!(name is null)) { }
+
+// Sonra
+if (name is not null) { }
+
+#endregion
+
+#region 23-) Property Region
+
+//Personal personal = new()
+//{
+//    Name = "Taha",
+//    Age = 21
+//};
+
+Personal personal = null;
+
+if (personal is { Name: "Taha", Age: 21 })
+{
+    Console.WriteLine("Esit Evet");
+}
+else
+{
+    Console.WriteLine("Esit Değil");
+}
+
+#endregion
+
+#region 24-) Nameof
+
+Console.WriteLine("nameOf");
+
+var myNameOf = new NameOf();
+
+var y = myNameOf.StringLength("asdas");
+
+NameOf.NameOfExamples();
+
+var method = myNameOf.GetType().GetMethod("StringLength");
+var c = method.GetCustomAttributes(true);
+var attribute = (DescriptionAttribute)c[0];
+Console.WriteLine(attribute == null ? "null" : attribute.Description);
+
+#endregion
+
+
+
+
+
+
+
 
